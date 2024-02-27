@@ -31,18 +31,25 @@ def get_player_move():
         except ValueError:
             print("Invalid input. Enter a number.")
 
-def play_again():
-    return input("Do you want to play again? (yes/no): ").lower().startswith('y')
+def choose_markers():
+    marker1 = input("Enter Player 1's marker (X or O): ").upper()
+    marker2 = "X" if marker1 == "O" else "O"
+    return marker1, marker2
+
+def announce_winner(player):
+    print(f"Player {player} wins!")
 
 def main():
+    marker1, marker2 = choose_markers()
+    players = {0: marker1, 1: marker2}
+
     while True:
         board = [[" " for _ in range(3)] for _ in range(3)]
-        players = ["X", "O"]
         current_player = 0
 
         while True:
             print_board(board)
-            print(f"Player {players[current_player]}'s turn:")
+            print(f"Player {current_player + 1}'s turn ({players[current_player]}):")
 
             row, col = get_player_move()
 
@@ -51,7 +58,7 @@ def main():
 
                 if check_winner(board, players[current_player]):
                     print_board(board)
-                    print(f"Player {players[current_player]} wins!")
+                    announce_winner(current_player + 1)
                     break
                 elif is_board_full(board):
                     print_board(board)
@@ -65,6 +72,8 @@ def main():
         if not play_again():
             break
 
+def play_again():
+    return input("Do you want to play again? (yes/no): ").lower().startswith('y')
+
 if __name__ == "__main__":
     main()
-
